@@ -50,27 +50,27 @@ export default function RootLayout({
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Button variant="ghost" className="text-white border-transparent hover:border-white">
+              <Button variant="ghost" className="text-white border-transparent hover:border-[#1E40AF]">
                 <Link href="/">Home</Link>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Button variant="ghost" className="text-white border-transparent hover:border-white">
+              <Button variant="ghost" className="text-white border-transparent hover:border-[#1E40AF]">
                 <Link href="/projects">Projects</Link>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Button variant="ghost" className="text-white border-transparent hover:border-white">
+              <Button variant="ghost" className="text-white border-transparent hover:border-[#1E40AF]">
                 <Link href="/backstory">Backstory</Link>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Button variant="ghost" className="text-white border-transparent hover:border-white">
+              <Button variant="ghost" className="text-white border-transparent hover:border-[#1E40AF]">
                 <Link href="/fitness">Lifts</Link>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Button variant="ghost" className="text-white border-transparent hover:border-white">
+              <Button variant="ghost" className="text-white border-transparent hover:border-[#1E40AF]">
                 <Link href="/drake">Drake</Link>
               </Button>
             </NavigationMenuItem>
