@@ -1,9 +1,9 @@
 // app/about/page.tsx
 export default function About() {
     return (
-      <div>
-        <h1>About Us</h1>
-        <p>This is the about page</p>
+      <div className = "text-white min-h-screen flex items-center justify-center">
+        <h1>About Me</h1>
+        
       </div>
     );
   }

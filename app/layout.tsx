@@ -14,6 +14,13 @@ import {
   NavigationMenuTrigger,
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,32 +45,32 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.variable} antialiased bg-[#0b0b0b]`}
       >
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Button variant = "ghost">
+              <Button variant="ghost" className="text-white border-transparent hover:border-white">
                 <Link href="/">Home</Link>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Button variant="ghost">
+              <Button variant="ghost" className="text-white border-transparent hover:border-white">
                 <Link href="/projects">Projects</Link>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Button variant="ghost">
+              <Button variant="ghost" className="text-white border-transparent hover:border-white">
                 <Link href="/backstory">Backstory</Link>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Button variant="ghost">
+              <Button variant="ghost" className="text-white border-transparent hover:border-white">
                 <Link href="/fitness">Lifts</Link>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Button variant="ghost">
+              <Button variant="ghost" className="text-white border-transparent hover:border-white">
                 <Link href="/drake">Drake</Link>
               </Button>
             </NavigationMenuItem>
