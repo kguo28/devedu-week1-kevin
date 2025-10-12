@@ -61,7 +61,7 @@ export default function RootLayout({
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Button variant="ghost" className="text-white border-transparent hover:border-[#1E40AF]">
-                <Link href="/backstory">Backstory</Link>
+                <Link href="/backstory">Current Events</Link>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
