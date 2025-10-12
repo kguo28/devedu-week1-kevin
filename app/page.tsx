@@ -35,8 +35,11 @@ export default function Home() {
           <div className = "w-fit">
             <Card className = "w-2xl flex items-center">
               <CardTitle className = "text-5xl font-bold text-center">
-              Hi, I’m Kevin Guo! I . . .
+              Hi, I’m Kevin Guo! I am . . .
               </CardTitle>
+            </Card>
+            <Card className = "w-2xl flex items-center">
+              
               <CardContent>
                 <Accordion
                   type = "single"
