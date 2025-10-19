@@ -3,7 +3,7 @@
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import {z} from "zod";
 
@@ -35,6 +35,7 @@ const signupSchema = z.object({
 })
 
 export default function Projects() {
+  const [users, setUsers] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     lastName: "",
@@ -43,7 +44,28 @@ export default function Projects() {
     password: "",
     confirmPassword: "",
   });
-  const [loading, setLoading] = useState(false);  
+  const [loading, setLoading] = useState(false);
+
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const {data, error} = await supabase
+        .from('userinfo')
+        .select('first_name, last_name, email, phone_number');
+      
+      if (error) throw error;
+
+      setUsers(data || []);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);  
   const clearForm = () => {
     setFormData({
       name: "",
@@ -65,7 +87,7 @@ export default function Projects() {
         .from('userinfo')
         .insert([
           {
-            name: validatedData.name,
+            first_name: validatedData.name,
             last_name: validatedData.lastName,
             email: validatedData.email,
             phone_number: validatedData.phoneNumber,
@@ -164,6 +186,35 @@ export default function Projects() {
                 <Button onClick={clearForm} variant="ghost" size="sm" disabled={loading}>
                   Clear
                 </Button>
+              </CardContent>
+            </Card>
+
+
+            <Card className="w-2xl">
+              <CardTitle className="text-2xl font-bold text-center mb-4">
+                Registered Users
+              </CardTitle>
+              <CardContent>
+                {loading ? (
+                  <div className="text-center py-4">Loading users...</div>
+                ) : users.length === 0 ? (
+                  <div className="text-center py-4 text-gray-500">No users found</div>
+                ) : (
+                  <div className="space-y-3">
+                    {users.map((user, index) => (
+                      <div key={index} className="flex justify-between items-center p-3 border rounded-lg bg-gray-50">
+                        <div>
+                          <h3 className="font-semibold">{user.first_name} {user.last_name}</h3>
+                          <p className="text-sm text-gray-600">{user.email}</p>
+                          <p className="text-xs text-gray-500">{user.phone_number}</p>
+                        </div>
+                        <Button size="sm" variant="outline">
+                          Add Friend
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
       
