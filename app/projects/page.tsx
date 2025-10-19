@@ -8,6 +8,14 @@ import { toast } from "sonner";
 import {z} from "zod";
 
 const signupSchema = z.object({
+  name: z.string()
+    .min(1, "Enter your first name")
+    .max(30, "Your first name can't be that long bro")
+    .regex(/^[a-zA-Z\s]+$/, "Your first name can only contain letters and spaces"),
+  lastName: z.string()
+    .min(1, "Enter your last name")
+    .max(30, "Your last name can't be that long bro")
+    .regex(/^[a-zA-Z\s]+$/, "Your last name can only contain letters and spaces"),
   email: z.string()
     .min(1, "Enter your email")
     .email("Invalid email"),
@@ -28,6 +36,8 @@ const signupSchema = z.object({
 
 export default function Projects() {
   const [formData, setFormData] = useState({
+    name: "",
+    lastName: "",
     email: "",
     phoneNumber: "",
     password: "",
@@ -36,6 +46,8 @@ export default function Projects() {
   const [loading, setLoading] = useState(false);  
   const clearForm = () => {
     setFormData({
+      name: "",
+      lastName: "",
       email: "",
       phoneNumber: "",
       password: "",
@@ -53,6 +65,8 @@ export default function Projects() {
         .from('userinfo')
         .insert([
           {
+            name: validatedData.name,
+            last_name: validatedData.lastName,
             email: validatedData.email,
             phone_number: validatedData.phoneNumber,
             password: validatedData.password,
@@ -64,14 +78,13 @@ export default function Projects() {
       if (error) throw error;
       
       console.log('Data inserted:', data);
-      toast.success('SignUp successful!');
+      toast.success('Account Created!');
       clearForm();
       
     } catch (error: any) {
       if (error instanceof z.ZodError) {
-        error.issues.forEach((err) => {
-          toast.error(err.message);
-        });
+        toast.error(error.issues[0].message);
+        return;
       } else if (error.code === '23505' && error.message.includes('password')) { 
         toast.error('Password already exists');
       } else if (error instanceof Error) {
@@ -88,8 +101,26 @@ export default function Projects() {
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
             <Card className = "w-2xl flex items-center">
               <CardTitle className = "text-5xl font-bold text-center">
-                SignUp
+                Create an account
               </CardTitle>
+                <CardContent>
+                  <div className="flex gap-4 items-center">
+                    <input 
+                      type="text" 
+                      placeholder="First Name" 
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"     
+                    />
+                    <input 
+                      type="text" 
+                      placeholder="Last Name" 
+                      value={formData.lastName}
+                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" 
+                    />
+                  </div>        
+                </CardContent>
               <CardContent>
                 <input 
                   type="text" 
