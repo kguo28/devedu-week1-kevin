@@ -49,15 +49,56 @@ export default function Projects() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
+      console.log('Starting fetchUsers...');
+      
+      // Try to fetch users with timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      console.log('Making Supabase request...');
       const {data, error} = await supabase
         .from('userinfo')
-        .select('first_name, last_name, email, phone_number');
+        .select('first_name, last_name, email, phone_number')
+        .abortSignal(controller.signal);
       
-      if (error) throw error;
+      clearTimeout(timeoutId);
+      
+      console.log('Supabase response:', { data, error });
+      
+      if (error) {
+        console.error('Supabase error details:', {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint
+        });
+        throw error;
+      }
 
       setUsers(data || []);
+      console.log('Successfully fetched users:', data);
+      
     } catch (error: any) {
-      toast.error(error.message);
+      console.error('Fetch error details:', {
+        name: error.name,
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        stack: error.stack
+      });
+      
+      if (error.name === 'AbortError') {
+        toast.error('Connection timeout - Supabase may be offline');
+      } else if (error.message?.includes('Failed to fetch')) {
+        toast.error('Cannot connect to Supabase - check your internet connection');
+      } else if (error.code === 'PGRST301') {
+        toast.error('Table not found - check your Supabase table name');
+      } else if (error.code === 'PGRST301') {
+        toast.error('Permission denied - check RLS policies');
+      } else {
+        toast.error(`Database error: ${error.message || 'Unknown error'} (Code: ${error.code || 'N/A'})`);
+      }
     } finally {
       setLoading(false);
     }
@@ -66,6 +107,7 @@ export default function Projects() {
   useEffect(() => {
     fetchUsers();
   }, []);  
+  
   const clearForm = () => {
     setFormData({
       name: "",
@@ -103,12 +145,17 @@ export default function Projects() {
       toast.success('Account Created!');
       clearForm();
       
+      // Refresh the users list after successful insert
+      fetchUsers();
+      
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         toast.error(error.issues[0].message);
         return;
       } else if (error.code === '23505' && error.message.includes('password')) { 
         toast.error('Password already exists');
+      } else if (error.message?.includes('Failed to fetch')) {
+        toast.error('Cannot connect to database - please try again');
       } else if (error instanceof Error) {
         toast.error(error.message);
       } else {
