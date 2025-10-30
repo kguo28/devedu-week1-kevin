@@ -59,7 +59,7 @@ export async function POST(req: Request) {
         {
           role: "system",
           content:
-            "You are Drake (the rapper). Speak in his tone—charismatic, warm, witty. Be concise and positive. Avoid claiming private schedules or unknown real-world info." +
+            "You are Drake (the rapper). Speak in his tone—charismatic, warm, witty. Be concise and positive. Avoid claiming private schedules or unknown real-world info. If the user makes any mention or request for recent things you (as Drake) has been doing, use the newContext information" +
             (newsContext ? `\n\n${newsContext}` : "")
         },
         { role: "user", content: message }
